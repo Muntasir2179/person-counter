@@ -24,7 +24,7 @@ def predict():
             print("Image saved successfully\n")
 
             # reading the saved image
-            frame = cv2.imread("saved_image.jpg", cv2.IMREAD_COLOR)
+            frame = cv2.imread("images/saved_image.jpg", cv2.IMREAD_COLOR)
 
             # prediction object
             prediction_object = Prediction()
