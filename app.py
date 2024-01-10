@@ -1,3 +1,4 @@
+import numpy as np
 import base64
 import cv2
 from flask import Flask, request, jsonify
@@ -16,25 +17,21 @@ def predict():
         image_data = json_data['image']
 
         # converting the base64 image data into bytes
-        image = base64.b64decode(image_data, validate=True)
+        image_original = base64.b64decode(image_data, validate=True)
+        jpg_as_np = np.fromstring(image_original, dtype=np.uint8)
 
-        # saving the image
-        with open("saved_image.jpg", 'wb') as f:
-            f.write(image)
-            print("Image saved successfully\n")
+        # reading the image
+        frame = cv2.imdecode(jpg_as_np, cv2.IMREAD_COLOR)
 
-            # reading the saved image
-            frame = cv2.imread("images/saved_image.jpg", cv2.IMREAD_COLOR)
+        # prediction object
+        prediction_object = Prediction()
 
-            # prediction object
-            prediction_object = Prediction()
+        # passing the image to yolov8 model
+        person_count = prediction_object.count_person(frame)
+        print(f"Number of person count is: {person_count}")
 
-            # passing the image to yolov8 model
-            person_count = prediction_object.count_person(frame)
-            print(f"Number of percent count is: {person_count}")
-
-            # returning the response
-            dict_to_return['person_count'] = person_count
+        # returning the response
+        dict_to_return['person_count'] = person_count
     except Exception as e:
         print(f"Exception: {e}")
 
