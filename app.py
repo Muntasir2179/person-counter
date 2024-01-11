@@ -3,6 +3,7 @@ import base64
 import cv2
 from flask import Flask, request, jsonify
 from src.main import Prediction
+from time import time
 
 app = Flask(__name__)
 
@@ -11,6 +12,7 @@ app = Flask(__name__)
 @app.route('/predict', methods=["POST"])
 def predict():
     dict_to_return = {"person_count": "Exception Occurred"}
+    # start_time = time()
     try:
         json_data = request.get_json(force=True)  # getting the json data
         # getting the image data in base64 format
@@ -34,6 +36,8 @@ def predict():
         dict_to_return['person_count'] = person_count
     except Exception as e:
         print(f"Exception: {e}")
+
+    # print(f"Total execution time: {time() - start_time}")
 
     return jsonify(dict_to_return)
 
