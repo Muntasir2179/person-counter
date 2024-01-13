@@ -9,10 +9,10 @@ app = Flask(__name__)
 
 
 # defining an endpoint for running inference on image
-@app.route('/predict', methods=["POST"])
+@app.route('/predict', methods=["POST", "GET"])
 def predict():
     dict_to_return = {"person_count": "Exception Occurred"}
-    # start_time = time()
+    start_time = time()
     try:
         json_data = request.get_json(force=True)  # getting the json data
         # getting the image data in base64 format
@@ -37,7 +37,7 @@ def predict():
     except Exception as e:
         print(f"Exception: {e}")
 
-    # print(f"Total execution time: {time() - start_time}")
+    print(f"Total execution time: {time() - start_time}")
 
     return jsonify(dict_to_return)
 
